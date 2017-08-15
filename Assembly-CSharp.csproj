@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\InputHandler.cs" />
      <Compile Include="Assets\Scripts\MeshGen.cs" />
      <Compile Include="Assets\Scripts\MeshTutorial1.cs" />
      <Compile Include="Assets\Scripts\MyMesh.cs" />

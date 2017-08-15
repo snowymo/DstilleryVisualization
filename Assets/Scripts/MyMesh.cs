@@ -14,6 +14,10 @@ public class MyMesh {
 		initialize (originalPos, vertices.Length / 8);
 	}
 
+	public void updateOneObj(Vector3 pos, int index){
+		initialize (pos, index);
+	}
+
 	void initialize(Vector3 startPoint, int index){
 //		vertices = new Vector3[8];
 		Array.Resize(ref vertices, vertices.Length + 8);
