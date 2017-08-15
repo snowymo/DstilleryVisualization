@@ -15,12 +15,15 @@ public class MeshGen : MonoBehaviour
 	//	MyMesh mm;
 	InputHandler ih;
 
-	float duration = 5.0F;
-	float startTime;
+	float duration = 3.0F;
+//	float startTime;
 
 	bool isAnimationStart;
 
 	const float MIN_DIS = 0.1f;
+
+	float accumulateTime = 0f;
+	float lastFrameTime = 0f;
 
 	// Use this for initialization
 	void Start ()
@@ -65,14 +68,16 @@ public class MeshGen : MonoBehaviour
 	{
 		if (isAnimationStart) {
 			// let us do one cluster every frame
-//			if (slickIndex == 0)
-//				t4animation = (Time.time - startTime) / duration;
-			t4animation += 0.05f;
-			print ("animated:" + startTime + " t:" + t4animation);
+			if (slickIndex == 0) {
+				accumulateTime += Time.time - lastFrameTime;
+				t4animation = accumulateTime / duration;
+			}
+//			t4animation += 0.05f;
+			print ("animated: slickIndex\t" + slickIndex + " t:" + t4animation);
 			animateEachSlice (slickIndex * 100, (slickIndex + 1) * 100, t4animation);
 			++slickIndex;
-			if (slickIndex >= 8)
-				slickIndex -= 8;
+			if (slickIndex >= (InputHandler.CLUSTER_SIZE / 100 + 1))
+				slickIndex -= (InputHandler.CLUSTER_SIZE / 100 + 1);
 		}
 	}
 
@@ -99,10 +104,11 @@ public class MeshGen : MonoBehaviour
 	void Update ()
 	{
 		if (Input.GetKey (KeyCode.M)) {
-			startTime = Time.time;
+//			startTime = Time.time;
 			isAnimationStart = true;
 		}
 		animatePointCloud ();
+		lastFrameTime = Time.time;
 //		 = GetComponent<MeshFilter>().mesh;
 //		mesh.vertices = mm.vertices;
 //		mesh.uv = mm.uvs;

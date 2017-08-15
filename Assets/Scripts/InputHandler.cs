@@ -1,14 +1,11 @@
-﻿using System;
+﻿#define MYDEBUG
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 using System.IO;
-
-//using UnityEngine;
-//using System.Collections;
-//using System.Collections.Generic;
-
 
 public class Cluster
 {
@@ -40,16 +37,25 @@ public class Point{
 	}
 }
 
+
+
 // load necessary files and parse it here
 public class InputHandler
 {
-
+	#if MYDEBUG
+	const int POINT_SIZE = 5000;//10;
+	public const  int CLUSTER_SIZE = 80;//3;
+	const string file_3dembedding = "Data/3d_embedding-mid.txt";
+	const string file_clusterlabel = "Data/clusters_C800-mid.txt";
+	const string file_clusterpos = "Data/cluster_centers_C800-mid.txt";
+	#else
 	const int POINT_SIZE = 50000;
-	const int CLUSTER_SIZE = 800;
-
+	public const  int CLUSTER_SIZE = 800;
 	const string file_3dembedding = "Data/3d_embedding.txt";
 	const string file_clusterlabel = "Data/clusters_C800.txt";
 	const string file_clusterpos = "Data/cluster_centers_C800.txt";
+	#endif
+
 
 	public Point[] points;
 	public Cluster[] clusters;
@@ -89,13 +95,13 @@ public class InputHandler
 	{
 		if (stLabel.Length == 2) {
 			string l = stLabel [0];
-			float questionmark = float.Parse (stLabel [1], System.Globalization.NumberStyles.Float);
+			float idx = float.Parse (stLabel [1], System.Globalization.NumberStyles.Float);
 			if(points [pointIdx4Start] == null)
 				points [pointIdx4Start] = new Point ();
 //			clusters [clusterIdx4Start++].label = l;
 			points[pointIdx4Start].label = l;
-			points [pointIdx4Start].cluster_group = (int)questionmark;
-			clusters[(int)(questionmark)].indicesOfPoints.Add(pointIdx4Start++);
+			points [pointIdx4Start].cluster_group = (int)idx % CLUSTER_SIZE;
+			clusters[(int)(idx) % CLUSTER_SIZE].indicesOfPoints.Add(pointIdx4Start++);
 		}
 	}
 
@@ -146,16 +152,19 @@ public class InputHandler
 		pointIdx4Start = 0;
 		loadHandler = addPointItem;
 		loadFromFile (file_3dembedding, new char[]{ ' ' });
+		Debug.Log ("finish points loading");
 
 		clusterIdx4Start = 0;
 		loadHandler = addClusterPos;
 		loadFromFile (file_clusterpos, new char[]{ ',' });
+		Debug.Log ("finish cluster loading");
 
 		// I guess the second column is the index of the cluster for each point
 //		clusterIdx4Start = 0;
 		pointIdx4Start = 0;
 		loadHandler = addClusterLabel;
 		loadFromFile (file_clusterlabel, new char[]{ ',' });
+		Debug.Log ("finish cluster label loading");
 	}
 
 	public InputHandler(){
