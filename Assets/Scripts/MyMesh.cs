@@ -61,14 +61,17 @@ public class MyMesh {
 
 //		norms = new Vector3[8];
 		Array.Resize(ref norms, norms.Length + 8);
-		norms [index * 8 + 0] = Vector3.forward;
-		norms [index * 8 + 1] = Vector3.forward;
-		norms [index * 8 + 2] = Vector3.forward;
-		norms [index * 8 + 3] = Vector3.forward;
-		norms [index * 8 + 4] = Vector3.forward;
-		norms [index * 8 + 5] = Vector3.forward;
-		norms [index * 8 + 6] = Vector3.forward;
-		norms [index * 8 + 7] = Vector3.forward;
+		norms [index * 8 + 0] = new Vector3 (- 0.5f,  - 0.5f,  - 0.5f);
+		norms [index * 8 + 1] = new Vector3 ( - 0.5f,  - 0.5f,  + 0.5f);
+		norms [index * 8 + 2] = new Vector3 ( + 0.5f,  - 0.5f,  + 0.5f);
+		norms [index * 8 + 3] = new Vector3 ( + 0.5f,  - 0.5f,  - 0.5f);
+		norms [index * 8 + 4] = new Vector3 ( - 0.5f,  + 0.5f,  - 0.5f);
+		norms [index * 8 + 5] = new Vector3 ( - 0.5f,  + 0.5f,  + 0.5f);
+		norms [index * 8 + 6] = new Vector3 ( + 0.5f,  + 0.5f,  + 0.5f);
+		norms [index * 8 + 7] = new Vector3 ( + 0.5f,  + 0.5f,  - 0.5f);
+		for (int i = 0; i < 8; i++) {
+			norms [index * 8 + i].Normalize ();
+		}
 	}
 
 	public MyMesh(){

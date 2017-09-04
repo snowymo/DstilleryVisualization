@@ -25,6 +25,16 @@ public class MeshGen : MonoBehaviour
 	float accumulateTime = 0f;
 	float lastFrameTime = 0f;
 
+	public enum Appearance
+	{
+ShowPoints,
+		ShowClusters}
+
+	;
+
+	public Appearance appear_option;
+		
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -41,12 +51,16 @@ public class MeshGen : MonoBehaviour
 
 		ih = new InputHandler ();
 		ih.Initialize ();
-		generateMeshForEachCluster ();
+		if (appear_option == Appearance.ShowPoints) {
+			generateMeshForEachClusterWithPoints ();
+		} else if (appear_option == Appearance.ShowClusters) {
+			generateMeshForEachCluster ();
+		}
 		isAnimationStart = false;
 
 	}
 
-	void generateMeshForEachCluster ()
+	void generateMeshForEachClusterWithPoints ()
 	{
 		for (int i = 0; i < ih.clusters.Length; i++) {
 			ih.clusters [i].go = GameObject.Instantiate (clusterUnit);
@@ -59,6 +73,24 @@ public class MeshGen : MonoBehaviour
 			mesh.uv = ih.clusters [i].mm.uvs;
 			mesh.triangles = ih.clusters [i].mm.triangles;
 			mesh.normals = ih.clusters [i].mm.norms;
+			mesh.RecalculateNormals ();
+		}
+	}
+
+	void generateMeshForEachCluster ()
+	{
+		for (int i = 0; i < ih.clusters.Length; i++) {
+			ih.clusters [i].go = GameObject.Instantiate (clusterUnit);
+			for (int j = 0; j < ih.clusters [i].indicesOfPoints.Count; j++) {
+//				print ("clusters[i].indicesOfPoints:" + j + "point:" + ih.points [ih.clusters [i].indicesOfPoints [j]]);
+				ih.clusters [i].mm.addOneObj (ih.clusters[i].pos);
+			}
+			Mesh mesh = ih.clusters [i].go.GetComponent<MeshFilter> ().mesh;
+			mesh.vertices = ih.clusters [i].mm.vertices;
+			mesh.uv = ih.clusters [i].mm.uvs;
+			mesh.triangles = ih.clusters [i].mm.triangles;
+			mesh.normals = ih.clusters [i].mm.norms;
+			mesh.RecalculateNormals ();
 		}
 	}
 
