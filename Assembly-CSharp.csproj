@@ -48,9 +48,13 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\CmrCtrl.cs" />
      <Compile Include="Assets\Scripts\InputHandler.cs" />
+     <Compile Include="Assets\Scripts\InputMgr.cs" />
      <Compile Include="Assets\Scripts\MeshGen.cs" />
      <Compile Include="Assets\Scripts\MeshTutorial1.cs" />
      <Compile Include="Assets\Scripts\MyMesh.cs" />
+     <Compile Include="Assets\Scripts\TooltipDisplay.cs" />
+     <None Include="Assets\Shaders\EditorHands.shader" />
+     <None Include="Assets\Shaders\3DTextShader.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

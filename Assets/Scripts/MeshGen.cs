@@ -13,7 +13,7 @@ public class MeshGen : MonoBehaviour
 	public GameObject clusterUnit;
 
 	//	MyMesh mm;
-	InputHandler ih;
+	public InputHandler ih;
 
 	float duration = 3.0F;
 //	float startTime;
@@ -36,7 +36,7 @@ ShowPoints,
 		
 
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
 		// which does not work because too many objects
 //		for (int i = 0; i < 10000; i++) {
@@ -54,7 +54,8 @@ ShowPoints,
 		if (appear_option == Appearance.ShowPoints) {
 			generateMeshForEachClusterWithPoints ();
 		} else if (appear_option == Appearance.ShowClusters) {
-			generateMeshForEachCluster ();
+//			generateMeshForEachCluster ();
+			generateSphereForEachCluster();
 		}
 		isAnimationStart = false;
 
@@ -64,8 +65,9 @@ ShowPoints,
 	{
 		for (int i = 0; i < ih.clusters.Length; i++) {
 			ih.clusters [i].go = GameObject.Instantiate (clusterUnit);
+			ih.clusters [i].go.name = "cluster" + i.ToString ();
 			for (int j = 0; j < ih.clusters [i].indicesOfPoints.Count; j++) {
-				print ("clusters[i].indicesOfPoints:" + j + "point:" + ih.points [ih.clusters [i].indicesOfPoints [j]]);
+//				print ("clusters[i].indicesOfPoints:" + j + "point:" + ih.points [ih.clusters [i].indicesOfPoints [j]]);
 				ih.clusters [i].mm.addOneObj (ih.points [ih.clusters [i].indicesOfPoints [j]].pos);
 			}
 			Mesh mesh = ih.clusters [i].go.GetComponent<MeshFilter> ().mesh;
@@ -81,16 +83,36 @@ ShowPoints,
 	{
 		for (int i = 0; i < ih.clusters.Length; i++) {
 			ih.clusters [i].go = GameObject.Instantiate (clusterUnit);
-			for (int j = 0; j < ih.clusters [i].indicesOfPoints.Count; j++) {
+			ih.clusters [i].go.name = "cluster" + i.ToString ();
+//			for (int j = 0; j < ih.clusters [i].indicesOfPoints.Count; j++) {
 //				print ("clusters[i].indicesOfPoints:" + j + "point:" + ih.points [ih.clusters [i].indicesOfPoints [j]]);
 				ih.clusters [i].mm.addOneObj (ih.clusters[i].pos);
-			}
+//			}
 			Mesh mesh = ih.clusters [i].go.GetComponent<MeshFilter> ().mesh;
 			mesh.vertices = ih.clusters [i].mm.vertices;
 			mesh.uv = ih.clusters [i].mm.uvs;
 			mesh.triangles = ih.clusters [i].mm.triangles;
 			mesh.normals = ih.clusters [i].mm.norms;
 			mesh.RecalculateNormals ();
+		}
+	}
+
+	float resizeScale = 10;
+	void generateSphereForEachCluster ()
+	{
+		for (int i = 0; i < ih.clusters.Length; i++) {
+			ih.clusters [i].go = GameObject.Instantiate (clusterUnit, ih.clusters[i].pos / resizeScale, Quaternion.identity);
+			ih.clusters [i].go.name = "cluster" + i.ToString ();
+			//			for (int j = 0; j < ih.clusters [i].indicesOfPoints.Count; j++) {
+			//				print ("clusters[i].indicesOfPoints:" + j + "point:" + ih.points [ih.clusters [i].indicesOfPoints [j]]);
+//			ih.clusters [i].mm.addOneObj (ih.clusters[i].pos);
+			//			}
+//			Mesh mesh = ih.clusters [i].go.GetComponent<MeshFilter> ().mesh;
+//			mesh.vertices = ih.clusters [i].mm.vertices;
+//			mesh.uv = ih.clusters [i].mm.uvs;
+//			mesh.triangles = ih.clusters [i].mm.triangles;
+//			mesh.normals = ih.clusters [i].mm.norms;
+//			mesh.RecalculateNormals ();
 		}
 	}
 
